@@ -16,7 +16,7 @@ npm install @babel/runtime-corejs3
 ```
 
 配置如下： 
-```json
+```js
 {
   "presets": [
     ["@babel/preset-env", {
@@ -41,7 +41,7 @@ npm install @babel/runtime-corejs3
       "corejs": 3, // 打包库
       "version": "^7.16.8"
     }],
-    ["@babel/plugin-transform-runtime"] // 打包应用
+    ["@babel/plugin-transform-runtime"] // 打包应用， 这两个不会同时出现
   ]
 }
 ```
