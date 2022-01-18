@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+      "target": "ES5",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "jsx": "preserve",
+      "sourceMap": true,
+      "declaration": true,
+      "outDir": "./es",
+      "lib": [
+        "DOM",
+        "DOM.Iterable",
+        "ES2016.Array.Include",
+        "ESNext",
+        "ScriptHost"
+      ],
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"]
+      },
+      "strict": true,
+      "allowJs": false,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "isolatedModules": true,
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "noEmitOnError": true,
+  },
+  "include": ["src/*"],
+  "exclude": ["node_modules", "dist"],
+}
