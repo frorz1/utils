@@ -14,8 +14,8 @@ export const isWechat = () => testUa('micromessenger')
 
 export const isWechat12 = () => testUa('micromessenger')
 
-export const inArray = (a: number) => {
+export const inArray = () => {
   const obj = { name: 'rudy' }
   const cop = { ...obj }
-  return [1,2].includes(a)
+  return [1,2].includes(1)
 }

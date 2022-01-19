@@ -8,11 +8,12 @@ const input = 'src/main.ts'
 const plugins = [
   typescript({sourceMap: !production}),
   resolve(), 
-  babel({
+  // 在ts编译结束之后再进行ployfill，这样不会影响模块化的结构
+  getBabelOutputPlugin({
     exclude: 'node_modules/**',
-    babelHelpers: 'runtime',
+    // babelHelpers: 'runtime',
     extensions: ['.ts'],
-    // allowAllFormats: true,
+    allowAllFormats: true,
     "presets": [
       ["@babel/preset-env", {
           "modules": false,
@@ -41,7 +42,7 @@ const plugins = [
 export default [
   {
     input,
-    plugins,
+    plugins: [babel()], // umd需要单独打包
     output: {
       file: 'dist/main.umd.js',
       format: 'umd',
