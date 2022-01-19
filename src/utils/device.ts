@@ -13,3 +13,9 @@ export const isAndroid = () => testUa('Android')
 export const isWechat = () => testUa('micromessenger')
 
 export const isWechat12 = () => testUa('micromessenger')
+
+export const inArray = (a: number) => {
+  const obj = { name: 'rudy' }
+  const cop = { ...obj }
+  return [1,2].includes(a)
+}

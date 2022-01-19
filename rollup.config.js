@@ -2,27 +2,68 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonJs from '@rollup/plugin-commonjs'
 import { terser } from "rollup-plugin-terser"
 import typescript from '@rollup/plugin-typescript'
+import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 const production = !process.env.ROLLUP_WATCH
-export default {
-  input: 'src/main.ts',
-  output: [
-    {
-      // sourcemap: !production,
-      file: 'dist/main.cjs.js',
-      format: 'cjs',
+const input = 'src/main.ts'
+const plugins = [
+  typescript({sourceMap: !production}),
+  resolve(), 
+  babel({
+    exclude: 'node_modules/**',
+    babelHelpers: 'runtime',
+    extensions: ['.ts'],
+    // allowAllFormats: true,
+    "presets": [
+      ["@babel/preset-env", {
+          "modules": false,
+          "targets": {
+            "browsers": [
+              "> 1%",
+              "last 2 versions"
+            ]
+          },
+          "useBuiltIns": "usage",
+          "corejs": {
+            "version": 3,
+            "proposals": true
+          }
+        }]
+    ],
+    "plugins": [
+      ["@babel/plugin-transform-runtime", {
+        corejs: 3
+      }]
+    ]
+  }),
+  commonJs(),
+  // terser()
+]
+export default [
+  {
+    input,
+    plugins,
+    output: {
+      file: 'dist/main.umd.js',
+      format: 'umd',
+      name: 'myUtil',
+      esModule: true,
+      exports: 'named',
     },
-    {
-      // sourcemap: !production,
-      file: 'dist/main.esm.js',
-      format: 'esm',
-    }
-  ],
-  plugins: [ 
-    typescript(),
-    resolve(), 
-    commonJs(),
-    terser()
-  ],
-  // 指出将哪些模块视为外部模块，不会将引用库的源码加入到打出的包中
-  // external: [/@babel\/runtime/]
-}
+  },
+  {
+    input,
+    plugins,
+    output: [
+      {
+        file: 'dist/main.cjs.js',
+        format: 'cjs',
+        exports: 'named',
+      },
+      {
+        file: 'dist/main.esm.js',
+        format: 'esm',
+        exports: 'named',
+      }
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 {
-  "name": "utils",
-  "version": "1.0.0",
+  "name": "frorz-lib",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/main.cjs.js",
   "module": "dist/main.esm.js",
@@ -26,12 +26,22 @@
   },
   "homepage": "https://github.com/frorz1/utils#readme",
   "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.16.8",
+    "@babel/preset-env": "^7.16.8",
+    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-typescript": "^8.3.0",
     "rollup": "^2.64.0",
+    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^2.3.1",
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.16.8",
+    "core-js": "^3.20.3",
+    "tslib": "^2.3.1"
   }
 }
