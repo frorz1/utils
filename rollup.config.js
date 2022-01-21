@@ -5,15 +5,11 @@ import typescript from '@rollup/plugin-typescript'
 import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 const production = !process.env.ROLLUP_WATCH
 const input = 'src/main.ts'
-const plugins = [
-  typescript({sourceMap: !production}),
-  resolve(), 
+const getBabelConfig = (buildBundled = true) => {
   // 在ts编译结束之后再进行ployfill，这样不会影响模块化的结构
-  getBabelOutputPlugin({
+  const config = {
     exclude: 'node_modules/**',
-    // babelHelpers: 'runtime',
     extensions: ['.ts'],
-    allowAllFormats: true,
     "presets": [
       ["@babel/preset-env", {
           "modules": false,
@@ -29,20 +25,35 @@ const plugins = [
             "proposals": true
           }
         }]
-    ],
-    "plugins": [
+    ]
+  }
+  if (buildBundled) {
+    config.babelHelpers = 'bundled' // bundle-打包应用，runtime-打包库
+  } else {
+    // getBabelOutputPlugin 是在rollup打包结束之后，把产物(esm, cjs, umd)传递给babal, 然后babel再对其做polyfill, babel此时并不会破坏产物的规范
+    // 真正的解析import xxx from 'xxx'是在rollup或者webpack打包的时候
+    // 也就是，先Babel，后rollup -> 得到的是bundle
+    // 先rollup， 再babel的到的是 -> 具有（esm, cjs）规范的代码
+    config.allowAllFormats = true
+    config.plugins = [
       ["@babel/plugin-transform-runtime", {
-        corejs: 3
+        corejs: 3,
+        useESModules: true
       }]
     ]
-  }),
+  }
+  return config
+}
+const plugins = [
+  typescript({sourceMap: !production}),
+  resolve(),
   commonJs(),
   // terser()
 ]
 export default [
   {
     input,
-    plugins: [babel()], // umd需要单独打包
+    plugins: [...plugins, babel(getBabelConfig(true))], // umd需要单独打包
     output: {
       file: 'dist/main.umd.js',
       format: 'umd',
@@ -53,7 +64,7 @@ export default [
   },
   {
     input,
-    plugins,
+    plugins: [...plugins, getBabelOutputPlugin(getBabelConfig(false))],
     output: [
       {
         file: 'dist/main.cjs.js',
